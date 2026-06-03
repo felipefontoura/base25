@@ -39,22 +39,26 @@ npm run build       # Production build
 
 CI passes → safe to merge.
 
-## Deployment (Vercel)
+## Deployment
 
-Deploys automatically on every push to `main` via `.github/workflows/deploy.yml`.
+### GitHub Pages (active — auto-deploys on push to `main`)
 
-### First-time setup (one-time, ~5 min)
+`.github/workflows/pages.yml` builds a static export and deploys to GitHub Pages automatically.
 
-1. Go to [vercel.com/new](https://vercel.com/new) and import the `base25` GitHub repo.
-2. Accept all defaults — Vercel auto-detects Next.js.
-3. After the first deployment, go to **Settings → General** and copy:
-   - `VERCEL_TOKEN` — create at [vercel.com/account/tokens](https://vercel.com/account/tokens)
-   - `VERCEL_ORG_ID` — in `.vercel/project.json` after running `vercel link` locally
-   - `VERCEL_PROJECT_ID` — same file
+**Live URL:** https://felipefontoura.github.io/base25/
+
+No setup required — this runs on every push to `main`.
+
+### Vercel (configured — activate when ready for SSR)
+
+`.github/workflows/deploy.yml` deploys to Vercel on push to `main` using the Vercel CLI.
+GitHub Pages is sufficient for the skeleton; switch to Vercel when you need SSR or edge functions.
+
+#### Activating Vercel (one-time, ~5 min)
+
+1. Go to [vercel.com/new](https://vercel.com/new) and import the `base25` GitHub repo. Accept defaults.
+2. Run `vercel link` locally to generate `.vercel/project.json` — get `VERCEL_ORG_ID` and `VERCEL_PROJECT_ID` from that file.
+3. Create a token at [vercel.com/account/tokens](https://vercel.com/account/tokens) — that's `VERCEL_TOKEN`.
 4. Add all three as **GitHub repository secrets** under Settings → Secrets → Actions.
 
-After setup, every merge to `main` deploys to production automatically. Pull request previews are handled by the Vercel GitHub App.
-
-### URL
-
-Production: `https://base25.vercel.app` (or your custom domain once configured).
+After setup, `deploy.yml` takes over from `pages.yml` for production.
