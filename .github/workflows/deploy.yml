@@ -1,12 +1,16 @@
-name: Deploy
+name: Deploy to Vercel
 
 on:
   push:
     branches: [main]
 
+# Skips gracefully when VERCEL_TOKEN is not set.
+# See README.md for setup instructions.
+
 jobs:
   deploy:
     name: Deploy to Vercel
+    if: ${{ vars.VERCEL_ENABLED == 'true' }}
     runs-on: ubuntu-latest
     environment:
       name: production
@@ -16,10 +20,10 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
           cache: npm
 
-      - run: npm ci
+      - run: npm install
 
       - run: npm install --global vercel@latest
 
